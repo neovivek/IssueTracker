@@ -9,6 +9,9 @@ class Components{
 		$this->setCurrentProject($project);
 		$this->setUser($user);
 	}
+	function __destruct(){
+		$this->closeSession();
+	}
 	protected function printBox($row){
 		$tags = explode(",", $row["tags"]);
 		echo '	<div class="issue-header col-m12">
@@ -17,7 +20,7 @@ class Components{
 					</div>
 					<div class="issue-tag col-m8">';
 		if(count($tags) > 0){
-			echo '<ul class="pager">';
+			echo '<ul class="pager left">';
 			for($i=0; $i<count($tags); $i++){
 				echo '<li><a>'.$tags[$i].'</a></li>';
 			}
@@ -60,14 +63,13 @@ class Components{
 		return $this->user;
 	}
 	public final function setSession($name, $value="NULL"){
-		session_start();
+		if ($this->sessionSet == 0)	session_start();
 		if($value == "NULL"){
 			$this->sessionSet -= 2;
 			unset($_SESSION[$name]);
 		}
 		$_SESSION[$name] = $value;
 		$this->sessionSet ++;
-		session_close();
 		return true;
 	}
 	public final function unsetSession($name){

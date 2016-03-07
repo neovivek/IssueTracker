@@ -6,24 +6,31 @@ class ConnectionManager{
 	private $password;
 	private $pdo;
 	private $sth;
-	protected $connection;
+	static protected $connection;
 	
 	function __construct($username = "root", $password = "", $database = ""){
 		$this->database = $database;
 		$this->username = $username;
 		$this->password = $password;
 	}
+	function __destruct(){
+		$this->closeConnection();
+	}
 	final public function createConnection(){
 		$dsn = "mysql:host=localhost;dbname=".$this->database;
 		try {
-			$this->connection = new PDO($dsn, $this->username, $this->password);
+			ConnectionManager::$connection = new PDO($dsn, $this->username, $this->password);
 		}catch (PDOException $e){
 			die("Connection exception" . $e->getMessage());
 		}
-		return $this->connection;
+		return ConnectionManager::$connection;
+	}
+	final public function closeConnection(){
+		$this->sth = null;
+		$this->connection = null;
 	}
 	public function getConnection(){
-		return $this->connection;
+		return ConnectionManager::$connection;
 	}
 	public function getDatabase(){
 		return $this->database;
@@ -42,13 +49,13 @@ class ConnectionManager{
 	}
 	public function execute($query, $arguments = array()){
 		try {
-			$this->connection->beginTransaction();
-			$this->sth = $this->connection->prepare($query);
+			ConnectionManager::$connection->beginTransaction();
+			$this->sth = ConnectionManager::$connection->prepare($query);
 			$this->sth->execute($arguments) or die( var_dump($this->sth->errorInfo()) );
 			try {
-				$this->connection->commit();
+				ConnectionManager::$connection->commit();
 			}catch (PDOException $e){
-				$this->connection->rollBack();
+				ConnectionManager::$connection->rollBack();
 			}
 			return $this->sth;
 		}catch (PDOException $e){
