@@ -27,7 +27,7 @@ class ConnectionManager{
 	}
 	final public function closeConnection(){
 		$this->sth = null;
-		$this->connection = null;
+		ConnectionManager::$connection = null;
 	}
 	public function getConnection(){
 		return ConnectionManager::$connection;
