@@ -9,9 +9,6 @@ class Components{
 		$this->setCurrentProject($project);
 		$this->setUser($user);
 	}
-	function __destruct(){
-		$this->closeSession();
-	}
 	protected function printBox($row){
 		$tags = explode(",", $row["tags"]);
 		echo '	<div class="issue-header col-m12">

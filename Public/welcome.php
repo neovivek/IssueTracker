@@ -15,36 +15,36 @@ li.suggestion {padding: 8px 20px;font-size: 32px;color: #ccc;border-bottom: 1px 
 #welcome-error-container {position: absolute;width: 450px;margin: 0 28px;top: 131px;}
 </style>
 
-<div id="welcome" class="row">
-	<div class="col s7" style="margin-bottom:0px;float:none;margin:auto;">
-		<div class="col s3 left welcome-logo teal darken-2">
+<div id="welcome" class="container">
+	<div class="col-sm-7" style="margin-bottom:0px;float:none;margin:auto;">
+		<div class="col-sm-3 left welcome-logo teal darken-2">
 			<i class="fa fa-mobile"></i>
 		</div>
-		<div class="col s9 right welcome-data grey darken-3">
+		<div class="col-sm-9 right welcome-data grey darken-3">
 			<div class="row">
-				<div id="welcome-head" class="col s12">
-					<div class="col s12 orange-text text-darken-2 truncate">
+				<div id="welcome-head" class="col-sm-12">
+					<div class="col-sm-12 orange-text text-darken-2 truncate">
 						<kbd><a class="breadcrumb">Name</a></kbd>
 					</div>
 				</div>
-				<div id="welcome-body" class="col s12">
+				<div id="welcome-body" class="col-sm-12">
 					<form method="POST" action="" style="position:relative;">
-						<div id="welcome-name" class="col s12">
+						<div id="welcome-name" class="col-sm-12">
 							<span class="title">Enter Your Name</span>
-							<div class="input-field col s10">
+							<div class="input-field col-sm-10">
 								<input type="text" name="name" id="welcome-user-name" class="special" />
 							</div>
-							<div class="input-field col s1 right">
+							<div class="input-field col-sm-1 right">
 								<i class="red-text text-darken-1 fa fa-chevron-circle-right fa-3x"></i>
 							</div>
 						</div>
-						<div id="welcome-project" class="col s12">
+						<div id="welcome-project" class="col-sm-12">
 							<span class="title">Enter Your Project Name</span>
-							<div class="input-field col s10">
+							<div class="input-field col-sm-10">
 								<input type="text" name="project" id="welcome-project-name" class="special" />
 							</div>
 							<i class="fa fa-angle-down fa-2x" id="project-suggestion"></i>
-							<div class="input-field col s1 right">
+							<div class="input-field col-sm-1 right">
 								<i class="red-text text-darken-1 fa fa-chevron-circle-right fa-3x"></i>
 							</div>
 						</div>
