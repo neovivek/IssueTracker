@@ -36,12 +36,14 @@ $HeaderType = 1;   // This value is used in case of header type selection in hea
 		}.row .col.browser-default {
 		    padding: 3px;
 		    height: 2em;
+		}.issue-item{
+		transition: 2s all ease-in-out;
 		}
 		</style>
 	</head>
 	<body>
 		<?php require_once __ROOT__.'/Public/header.php';?>
-		<div class="row">
+		<div class="container">
 			<div class="col-sm-3 data-block">
 				<div class="col-sm-12"><?php echo $_SESSION['username']; ?></div>
 				<div class="col-sm-12"><?php echo $_SESSION['project']; ?></div>
@@ -55,7 +57,7 @@ $HeaderType = 1;   // This value is used in case of header type selection in hea
 				</div>
 			</div>
 			<div class='col-sm-9'>
-				<div class="container data-block">
+				<div class="row data-block">
 					<div class='col-sm-12'>
 						<select class='browser-default col-sm-5' id='sorting-bay'>
 							<option value='0' selected disabled>Sort By</option>
@@ -76,9 +78,9 @@ $HeaderType = 1;   // This value is used in case of header type selection in hea
 						"ORDER BY ID DESC";
 						$manager->execute($query);
 						while ($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
-							echo "<div class='col-sm-12'>".
+							echo "<div class='col-sm-12 issue-item' id='iss"+ $row['id'] +"'>".
 								"<span><a href='javascript: findDetails(".$row['id'].")'>ISSUE ".$row['id']."</a></span>".
-								"<div class='col-sm-12 truncate'>".$row['title']."</div>".
+								"<div class='truncate'>".$row['title']."</div>".
 							"</div>";
 						}
 						?>
@@ -86,19 +88,9 @@ $HeaderType = 1;   // This value is used in case of header type selection in hea
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
+		<div class="modal fade" id="issueModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content" id="issue-detail">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myModalLabel">Modal title</h4>
-					</div>
-					<div class="modal-body">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
-					</div>
 				</div>
 			</div>
 		</div>

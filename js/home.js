@@ -1,6 +1,7 @@
 function findDetails(e){
+	var globalKey = new global();
 	$.ajax({
-		url: '/Amber/Util/detail.php',
+		url: globalKey.baseAddress + '/Util/detail.php',
 		data: {'id': e},
 		type: 'POST',
 		success: function(a){
@@ -14,7 +15,7 @@ function findDetails(e){
 				var severity = $(d[i]).find('S').text();
 				var detail = "<div class='modal-header'>" +
 							"<h4 class='modal-title' id='myModalLabel'>" +
-								"<a href='/issue/"+ id +"'>ISSUE "+ id +"</a>" +
+								"ISSUE "+ id +
 								"<span class='badge pull-right severity-"+ severity +"'>Level "+ severity +"</span>" +
 							"</h4>" +
 						"</div>" +
@@ -31,9 +32,31 @@ function findDetails(e){
 						"</div>" +
 						"<div class='modal-footer'>" +
 							"<button type='button' class='btn btn-success' onclick='javascript: resolved("+ id +");' >Mark as Resolved</button>" +
-							"<button type='button' class='btn btn-info' onclick='javascript: edit("+ id +");' >Edit Details</button>" +
+							"<button type='button' class='btn btn-info' onclick='javascript: edit(this)' data-target='"+ id +"' >Edit Details</button>" +
 						"</div>";
 				$("#issue-detail").html(detail);
+				$("#issueModal").modal();
+			}
+		}
+	});
+}
+
+function edit(e){
+	window.location = '/issue/' + $(e).attr('data-target');
+}
+
+function resolved(e){
+	var globalKeys = new global();
+	$.ajax({
+		url: globalKeys.baseAddress + '/Util/markResolved.php',
+		data: {'key': e},
+		success: function(a){
+			d = a.getElementsByTagName('status').content;
+			if(d == 'success'){
+				$("#issueModal").modal('toggle');
+				method.setIssueStatus('success', e);
+			}else{
+				method.setIssueStatus('failed');
 			}
 		}
 	});
