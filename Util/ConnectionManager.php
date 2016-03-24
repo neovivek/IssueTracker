@@ -47,7 +47,7 @@ class ConnectionManager{
 			echo "Database Changing failed : ". $e->getMessage();
 		}
 	}
-	public function execute($query, $arguments = array()){
+	public function executeQuery($query, $arguments = array()){
 		try {
 			ConnectionManager::$connection->beginTransaction();
 			$this->sth = ConnectionManager::$connection->prepare($query);
@@ -56,6 +56,7 @@ class ConnectionManager{
 				ConnectionManager::$connection->commit();
 			}catch (PDOException $e){
 				ConnectionManager::$connection->rollBack();
+				echo "Query cannot be executed";
 			}
 			return $this->sth;
 		}catch (PDOException $e){
@@ -64,7 +65,7 @@ class ConnectionManager{
 	}
 	public function createDatabase($db){
 		$query = "CREATE DATABASE IF NOT EXISTS $db";
-		$this->execute($query);
+		$this->executeQuery($query);
 		$this->selectDatabase($db);
 	}
 }

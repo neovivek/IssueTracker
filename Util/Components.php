@@ -10,14 +10,14 @@ class Components{
 		$this->setUser($user);
 	}
 	protected function printBox($row){
-		$tags = explode(",", $row["tags"]);
-		echo '	<div class="issue-header col-m12">
-					<div class="issue-id col-m4">
-						<a href="/issue/'.$row["id"].'">ISSUE '.$row["id"].'  </a>
-					</div>
-					<div class="issue-tag col-m8">';
+		$tags = explode("-", $row["tags"]);
+		echo '	<div class="issue-header col-md-12">
+					<span class="issue-id">
+						<a href="javascript: findDetails('.$row["id"].')">ISSUE '.$row["id"].'  </a>
+					</span>
+					<div class="issue-tag col-md-8">';
 		if(count($tags) > 0){
-			echo '<ul class="pager left">';
+			echo '<ul class="pager">';
 			for($i=0; $i<count($tags); $i++){
 				echo '<li><a>'.$tags[$i].'</a></li>';
 			}
@@ -25,23 +25,23 @@ class Components{
 		}
 		echo '		</div>
 				</div>
-				<div class="issue-body col-s12">
+				<div class="truncate">
 					'.$row["title"].'
 				</div>';
 	}
 	public function printIssueBox($row){
-		echo '<div class="bs-callout bs-callout-warning col-m12">';
+		echo '<div class="issue-item col-md-12" id="iss-'.$row['id'].'">';
 		$this->printBox($row);
-		echo '	<div class="issue-footer col-s12">
-					<a href="javascript: void();" class="issue-close" data-target="'.$row["id"].'">Close Issues</a>
+		echo '	<div class="issue-footer">
+					<a href="javascript: resolved(\''.$row["id"].'\');" class="issue-close" data-target="'.$row["id"].'">Close Issue</a>
 				</div>
 			</div>';
 	}
 	public function printResolvedBox($row){
-		echo '<div class="bs-callout bs-callout-warning col-m12">';
+		echo '<div class="issue-item col-md-12" id="iss-'.$row['id'].'">';
 		$this->printBox($row);
-		echo '	<div class="issue-footer col-s12">
-					<a href="javascript: void();" class="issue-open" data-target="'.$row["id"].'">Reopen Issues</a>
+		echo '	<div class="issue-footer">
+					<a href="javascript: reopen(\''.$row["id"].'\');" class="issue-open" data-target="'.$row["id"].'">Reopen Issue</a>
 				</div>
 			</div>';
 	}
@@ -60,7 +60,7 @@ class Components{
 		return $this->user;
 	}
 	public final function setSession($name, $value="NULL"){
-		if ($this->sessionSet == 0)	session_start();
+		if(!isset($_SESSION)) session_start();
 		if($value == "NULL"){
 			$this->sessionSet -= 2;
 			unset($_SESSION[$name]);

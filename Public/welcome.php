@@ -54,7 +54,7 @@ li.suggestion {padding: 8px 20px;font-size: 32px;color: #ccc;border-bottom: 1px 
 				<?php 
 					require_once '/Util/connectdb.php';
 					$query = "SELECT * FROM project WHERE active='1' ";
-					$manager->execute($query);
+					$manager->executeQuery($query);
 					echo "<ul id='project-suggestion-container'>";
 					while($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
 						echo "<li class='suggestion' name='1'>".$row['project']."</li>";

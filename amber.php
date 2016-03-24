@@ -13,9 +13,9 @@ $query = "CREATE TABLE IF NOT EXISTS project (
 		)";
 $query1 = "ALTER TABLE project AUTO_INCREMENT=1000000000";
 $query2 = "INSERT INTO project (`project`, `active`) VALUES('pos simulator', '1')";
-// $testVar->execute($query);
-// $testVar->execute($query1);
-// $testVar->execute($query2);
+// $testVar->executeQuery($query);
+// $testVar->executeQuery($query1);
+// $testVar->executeQuery($query2);
 
 include "./Public/header.php";
 echo "<main>";
