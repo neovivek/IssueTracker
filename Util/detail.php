@@ -37,7 +37,7 @@ if(!(empty($_SERVER['HTTP_X_REQUESTED_WITH'])) and strtolower($_SERVER['HTTP_X_R
 								"<c>".$row['created_on']."</c>".
 								"<S>".$row['severity']."</S>".
 								"<R>".$row['is_resolved']."</R>".
-								"</block>";
+							"</block>";
 					}
 					echo "</data>";
 					return;
