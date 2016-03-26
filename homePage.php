@@ -139,9 +139,10 @@ $user_total_bugs = $row1['user_total'];
 							<h3>Issues</h3>
 						</div>
 						<div class="issue-item col-md-12">
+							<span><i class="fa fa-filter"></i>Filter: </span>
 							<div class="btn-group bay">
 							  	<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="sorting-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    	<i class="fa fa-filter"></i>Sort by:<b> Date</b>
+							    	Sort by:<b> Date</b>
 							    	<span class="caret"></span>
 							  	</button>
 							  	<ul class="dropdown-menu" aria-labelledby="sorting-bay">
@@ -151,7 +152,7 @@ $user_total_bugs = $row1['user_total'];
 							</div>
 							<div class="btn-group bay">
 							  	<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="display-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    	<i class="fa fa-filter"></i>Show from:<b> Open</b>
+							    	Show from:<b> Open</b>
 							    	<span class="caret"></span>
 							  	</button>
 							  	<ul class="dropdown-menu" aria-labelledby="display-bay">

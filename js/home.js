@@ -88,7 +88,9 @@ $(function () {
 		  $.ajax({
 			 url: globalKey.baseAddress + '/Util/detail.php',
 			 data: {'id': id, "a": 2},
-			 success: function(data){
+			 type: "POST",
+			 success: function(d){
+				 data = d.getElementsByTagName('status')[0].innerHTML;
 				 $(parent).find('a').attr('data-content', data).popover('toggle');
 			 }
 		  });
