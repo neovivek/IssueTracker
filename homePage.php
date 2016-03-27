@@ -3,27 +3,47 @@ if(!defined('__ROOT__')) define("__ROOT__", dirname(__FILE__));
 require_once __ROOT__.'/Util/Components.php';
 require_once __ROOT__.'/Util/connectdb.php';
 if(!isset($_SESSION)) session_start();
-$query = "SELECT COUNT(*) AS total FROM issues WHERE ".
-"project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project']."')";
+$query = "SELECT COUNT(*) AS total FROM issues WHERE 
+	project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project']."')";
 $manager->executeQuery($query);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $total_bugs = $row1['total'];
 
-$query = "SELECT COUNT(*) AS open FROM issues WHERE is_resolved = 1 AND ".
-"project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project'] ."')";
+$query = "SELECT COUNT(*) AS open FROM issues WHERE is_resolved = 1 AND 
+	project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project'] ."')";
 $manager->executeQuery($query);
 $row2 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $open_bugs = $row2['open'];
 
-$query = "SELECT COUNT(*) AS user_total FROM issues WHERE ".
-		"project_id = (SELECT id FROM project WHERE project = ? AND creator = (SELECT id FROM user where name = ?))";
+$query = "SELECT COUNT(*) AS user_total FROM issues WHERE 
+	project_id = (SELECT id FROM project WHERE project = ? AND creator = (SELECT id FROM user where name = ?))";
 $arguments = array($_SESSION['project'], $_SESSION['username']);
 $manager->executeQuery($query, $arguments);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $user_total_bugs = $row1['user_total'];
 
 // $HeaderType = 1;   // This value is used in case of header type selection in header.php
+$sort_val = "Date";
+$display_val = "Open";
+if(isset( $_REQUEST['i'] )){
+	$options = explode(" ", $_REQUEST['i']);
+	$is_sort = 0; $is_display = 0;
+	for($i=0; $i<count($options); $i++) {
+		$family = explode("-", $options[$i]);
+		switch ($family[0]){
+			case 'sort':
+				$is_sort = 1;
+				$sort_val = $family[1];
+				break;
+			case 'display':
+				$is_display = 1;
+				$display_val = $family[1];
+				break;
+		}
+	}
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -31,7 +51,6 @@ $user_total_bugs = $row1['user_total'];
 		<meta charset="UTF-16">
 		<link href="./css/bootstrap.min.css" rel="stylesheet" >
 		<link href="./css/font-awesome.min.css" rel="stylesheet" >
-		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
 		<style type="text/css">
 		body, html {
@@ -39,7 +58,6 @@ $user_total_bugs = $row1['user_total'];
 		    font-family: 'Open Sans', sans-serif;
 		}div#issue-list {
 		    position: relative;
-		    overflow: hidden;
 		    font-family: sans-serif;
 		}.row .col.browser-default {
 		    padding: 3px;
@@ -77,6 +95,8 @@ $user_total_bugs = $row1['user_total'];
 		    margin-right: 8px;
 		}.project-selector{
 			text-transform: capitalize;
+			cursor: pointer;
+		}.bay li{
 			cursor: pointer;
 		}a:focus, a:hover, a:visited, a:active {
 		    outline: none;
@@ -119,7 +139,7 @@ $user_total_bugs = $row1['user_total'];
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<div class="panel-title">Available project</div>
-							<?php 
+							<?php
 							$queryForProjectName = "SELECT * FROM project WHERE active = 1";
 							$manager->executeQuery($queryForProjectName);
 							while($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
@@ -133,7 +153,7 @@ $user_total_bugs = $row1['user_total'];
 						</div>
 					</div>
 				</div>
-				<div class='col-md-6'>
+				<div class='col-md-8'>
 					<div id="issue-list">
 						<div class="issue-item col-md-12">
 							<h3>Issues</h3>
@@ -141,35 +161,68 @@ $user_total_bugs = $row1['user_total'];
 						<div class="issue-item col-md-12">
 							<span><i class="fa fa-filter"></i>Filter: </span>
 							<div class="btn-group bay">
-							  	<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="sorting-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    	Sort by:<b> Date</b>
+							  	<button class="btn btn-default btn-xs dropdown-toggle" type="button" id="sorting-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							    	Sort by:<b> <?php echo $sort_val; ?></b>
 							    	<span class="caret"></span>
 							  	</button>
 							  	<ul class="dropdown-menu" aria-labelledby="sorting-bay">
-							    	<li><a data-value='severity' data-family='sort'>Severity</a></li>
-							    	<li><a data-value='date' data-family='sort'>Date</a></li>
+							    	<li><a data-value='Severity' data-family='sort'>Severity</a></li>
+							    	<li><a data-value='Date' data-family='sort'>Date</a></li>
 								</ul>
 							</div>
 							<div class="btn-group bay">
-							  	<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="display-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    	Show from:<b> Open</b>
+							  	<button class="btn btn-default btn-xs dropdown-toggle" type="button" id="display-bay" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							    	Show from:<b> <?php echo $display_val; ?></b>
 							    	<span class="caret"></span>
 							  	</button>
 							  	<ul class="dropdown-menu" aria-labelledby="display-bay">
-							    	<li><a data-value='all' data-family='display'>All</a></li>
-							    	<li><a data-value='resolved' data-family='display'>Resolved</a></li>
-							    	<li><a data-value='open' data-family='display'>Open</a></li>
+							    	<li><a data-value='All' data-family='display'>All</a></li>
+							    	<li><a data-value='Resolved' data-family='display'>Resolved</a></li>
+							    	<li><a data-value='Open' data-family='display'>Open</a></li>
 								</ul>
 							</div>
 						</div>
-						<?php 
-							$query = "SELECT id, title, tags FROM issues WHERE is_resolved = 0 AND ".
-							"project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project']."') ".
-							"ORDER BY ID DESC";
-							$manager->executeQuery($query);
+						<?php  
+							if(isset( $_REQUEST['i'] )){
+								$queryToSelectIssue = "SELECT id, title, tags, is_resolved FROM issues WHERE project_id = (SELECT id FROM project WHERE project = ?) ";
+								if($is_display == 1){
+									switch ($display_val){
+										case 'All':
+											break;
+										case 'Resolved':
+											$queryToSelectIssue .= " AND is_resolved = 1 ";
+											break;
+										default: 
+											$queryToSelectIssue .= " AND is_resolved = 0 ";
+									}
+								}else{
+									$queryToSelectIssue .= " AND is_resolved = 0 ";
+								}
+								if($is_sort == 1){
+									switch($sort_val){
+										case 'Severity':
+											$queryToSelectIssue .= " ORDER BY severity DESC";
+											break;
+										default:
+											$queryToSelectIssue .= " ORDER BY created_on DESC";
+									}
+								}else{
+									$queryToSelectIssue .= " ORDER BY created_on DESC";
+								}
+
+							}else{
+								$queryToSelectIssue = "SELECT id, title, tags, is_resolved FROM issues WHERE is_resolved = 0 AND 
+									project_id = (SELECT id FROM project WHERE project = ?) 
+									ORDER BY created_on DESC";
+							}
+							$argument = array(
+								$_SESSION['project']
+							);
+							$manager->executeQuery($queryToSelectIssue, $argument);
 							$component = new Components($_SESSION['project'], $_SESSION['username']);
 							while ($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
-								$component->printIssueBox($row);
+								if($row['is_resolved'] == 0) $component->printIssueBox($row);
+								else $component->printResolvedBox($row);
 							}
 							?>
 					</div>
@@ -177,7 +230,7 @@ $user_total_bugs = $row1['user_total'];
 			</div>
 		</div>
 		<div class="modal fade" id="issueModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-dialog" role="document">
 				<div class="modal-content" id="issue-detail">
 				</div>
 			</div>

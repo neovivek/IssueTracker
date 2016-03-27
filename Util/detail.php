@@ -11,9 +11,10 @@ if(!(empty($_SERVER['HTTP_X_REQUESTED_WITH'])) and strtolower($_SERVER['HTTP_X_R
 			$query = "SELECT * FROM issues WHERE id = ? ";
 			$getUsrName = "SELECT name FROM user WHERE id= ? ";
 			$getProjectCredential = "SELECT p.active, u.name AS pro_man, u1.name AS creator 
-					FROM project p WHERE id=?
+					FROM project p 
 					JOIN user u ON u.id=p.project_manager
-					JOIN user u1 ON u1.id=p.created_by";
+					JOIN user u1 ON u1.id=p.created_by
+					WHERE p.id=?";
 			
 			switch ($_POST['a']){
 				case 1:
@@ -40,12 +41,12 @@ if(!(empty($_SERVER['HTTP_X_REQUESTED_WITH'])) and strtolower($_SERVER['HTTP_X_R
 							"</block>";
 					}
 					echo "</data>";
-					return;
+					break;
 				case 2:
 					$arguments = array(
 						$_POST['id']
 					);
-					$manager->executeQuery($query, $arguments);
+					$sth = $manager->executeQuery($getProjectCredential, $arguments);
 					if($manager->getStateHandle()->errorCode() == '00000'){
 						$projectDetail = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 						if($projectDetail['active'] == 1) $status = "Active";
@@ -55,13 +56,12 @@ if(!(empty($_SERVER['HTTP_X_REQUESTED_WITH'])) and strtolower($_SERVER['HTTP_X_R
 									Current status ".$status.". Project started by ".$projectDetail['creator'].". Project managed by ".$projectDetail['pro_man'].".
 								</status>
 							</data>";
-						
 					}else{
 						echo "<data><status>Can not fetch details right now.</status></data>";
 					}
-					return;
+					break;
 				default:
-					return;
+					break;
 			}
 		}
 		

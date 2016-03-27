@@ -25,14 +25,14 @@ class Components{
 		}
 		echo '		</div>
 				</div>
-				<div class="truncate">
+				<div class="truncate col-md-12">
 					'.$row["title"].'
 				</div>';
 	}
 	public function printIssueBox($row){
 		echo '<div class="issue-item col-md-12" id="iss-'.$row['id'].'">';
 		$this->printBox($row);
-		echo '	<div class="issue-footer">
+		echo '	<div class="issue-footer col-md-12">
 					<a href="javascript: resolved(\''.$row["id"].'\');" class="issue-close" data-target="'.$row["id"].'">Close Issue</a>
 				</div>
 			</div>';
@@ -40,7 +40,7 @@ class Components{
 	public function printResolvedBox($row){
 		echo '<div class="issue-item col-md-12" id="iss-'.$row['id'].'">';
 		$this->printBox($row);
-		echo '	<div class="issue-footer">
+		echo '	<div class="issue-footer col-md-12">
 					<a href="javascript: reopen(\''.$row["id"].'\');" class="issue-open" data-target="'.$row["id"].'">Reopen Issue</a>
 				</div>
 			</div>';
