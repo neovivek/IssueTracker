@@ -67,6 +67,7 @@ class ConnectionManager{
 		$query = "CREATE DATABASE IF NOT EXISTS $db";
 		$this->executeQuery($query);
 		$this->selectDatabase($db);
+		$this->sth = null;
 	}
 }
 

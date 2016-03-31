@@ -8,12 +8,14 @@ $query = "SELECT COUNT(*) AS total FROM issues WHERE
 $manager->executeQuery($query);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $total_bugs = $row1['total'];
+$manager->getStateHandle() = null;
 
 $query = "SELECT COUNT(*) AS open FROM issues WHERE is_resolved = 1 AND 
 	project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project'] ."')";
 $manager->executeQuery($query);
 $row2 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $open_bugs = $row2['open'];
+$manager->getStateHandle() = null;
 
 $query = "SELECT COUNT(*) AS user_total FROM issues WHERE 
 	project_id = (SELECT id FROM project WHERE project = ? AND creator = (SELECT id FROM user where name = ?))";
@@ -21,8 +23,9 @@ $arguments = array($_SESSION['project'], $_SESSION['username']);
 $manager->executeQuery($query, $arguments);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $user_total_bugs = $row1['user_total'];
+$manager->getStateHandle() = null;
 
-// $HeaderType = 1;   // This value is used in case of header type selection in header.php
+$HeaderType = 1;   // This value is used in case of header type selection in header.php
 $sort_val = "Date";
 $display_val = "Open";
 if(isset( $_REQUEST['i'] )){
@@ -149,11 +152,12 @@ if(isset( $_REQUEST['i'] )){
 										$row['project']."</a></span>".
 								"</div>";
 							}
+							$manager->getStateHandle() = null;
 							?>
 						</div>
 					</div>
 				</div>
-				<div class='col-md-8'>
+				<div class='col-md-6'>
 					<div id="issue-list">
 						<div class="issue-item col-md-12">
 							<h3>Issues</h3>
@@ -224,7 +228,8 @@ if(isset( $_REQUEST['i'] )){
 								if($row['is_resolved'] == 0) $component->printIssueBox($row);
 								else $component->printResolvedBox($row);
 							}
-							?>
+							$manager->getStateHandle() = null;
+						?>
 					</div>
 				</div>
 			</div>
