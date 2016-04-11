@@ -3,6 +3,7 @@ define("__ROOT__", dirname(__FILE__));
 require_once __ROOT__.'/Util/connectdb.php';
 require_once __ROOT__.'/Util/Components.php';
 if(empty($_POST['name']) or !isset($_POST['name']) or empty($_POST['project']) or !isset($_POST['project']) ){
+	$HeaderType = 0;
 ?>
 <!DOCTYPE HTML>
 <html>

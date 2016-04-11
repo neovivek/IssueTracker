@@ -109,6 +109,10 @@ $(function () {
 			}
 		});
 	});
+	$(".project-selector").click(function(){
+		var title = $(this).find('a').attr('data-original-title').replace(/" "/g, "_");
+		window.location = '/group/' + title ;
+	});
 	$(".bay li").click(function(){
 		val = $(this).find('a').attr('data-value');
 		fam = $(this).find('a').attr('data-family');

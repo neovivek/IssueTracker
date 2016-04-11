@@ -5,25 +5,25 @@ require_once __ROOT__.'/Util/connectdb.php';
 if(!isset($_SESSION)) session_start();
 $query = "SELECT COUNT(*) AS total FROM issues WHERE 
 	project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project']."')";
-$manager->executeQuery($query);
+$sth = $manager->executeQuery($query);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $total_bugs = $row1['total'];
-$manager->getStateHandle() = null;
+$sth = null;
 
 $query = "SELECT COUNT(*) AS open FROM issues WHERE is_resolved = 1 AND 
 	project_id = (SELECT id FROM project WHERE project = '".$_SESSION['project'] ."')";
-$manager->executeQuery($query);
+$sth = $manager->executeQuery($query);
 $row2 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $open_bugs = $row2['open'];
-$manager->getStateHandle() = null;
+$sth = null;
 
 $query = "SELECT COUNT(*) AS user_total FROM issues WHERE 
 	project_id = (SELECT id FROM project WHERE project = ? AND creator = (SELECT id FROM user where name = ?))";
 $arguments = array($_SESSION['project'], $_SESSION['username']);
-$manager->executeQuery($query, $arguments);
+$sth = $manager->executeQuery($query, $arguments);
 $row1 = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC);
 $user_total_bugs = $row1['user_total'];
-$manager->getStateHandle() = null;
+$sth = null;
 
 $HeaderType = 1;   // This value is used in case of header type selection in header.php
 $sort_val = "Date";
@@ -144,7 +144,7 @@ if(isset( $_REQUEST['i'] )){
 							<div class="panel-title">Available project</div>
 							<?php
 							$queryForProjectName = "SELECT * FROM project WHERE active = 1";
-							$manager->executeQuery($queryForProjectName);
+							$sth = $manager->executeQuery($queryForProjectName);
 							while($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
 								echo "<div><i class='fa fa-link'></i>".
 										"<span class='project-selector' data-target='".$row['id']."'>".
@@ -152,7 +152,7 @@ if(isset( $_REQUEST['i'] )){
 										$row['project']."</a></span>".
 								"</div>";
 							}
-							$manager->getStateHandle() = null;
+							$sth = null;
 							?>
 						</div>
 					</div>
@@ -222,13 +222,13 @@ if(isset( $_REQUEST['i'] )){
 							$argument = array(
 								$_SESSION['project']
 							);
-							$manager->executeQuery($queryToSelectIssue, $argument);
+							$sth = $manager->executeQuery($queryToSelectIssue, $argument);
 							$component = new Components($_SESSION['project'], $_SESSION['username']);
 							while ($row = $manager->getStateHandle()->fetch(PDO::FETCH_ASSOC)){
 								if($row['is_resolved'] == 0) $component->printIssueBox($row);
 								else $component->printResolvedBox($row);
 							}
-							$manager->getStateHandle() = null;
+							$sth = null;
 						?>
 					</div>
 				</div>

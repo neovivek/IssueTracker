@@ -1,6 +1,6 @@
 <?php
 switch ($HeaderType) {
-	case 1:
+	case 0:
 		echo ("<nav class='navbar navbar-default navbar-fixed-top'>
 			<div class='container'>
 				<div class='navbar-header'>
@@ -15,7 +15,7 @@ switch ($HeaderType) {
 			</div>
 		</nav>");
 		break;
-	default:
+	case 1:
 		echo ("<nav class='navbar navbar-default navbar-fixed-top'>
 			<div class='container'>
 				<div class='navbar-header'>
